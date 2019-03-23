@@ -1,7 +1,11 @@
 require "pp"
 require "rmagick"
 require "json"
-require_relative "AnimeFace"
+if RUBY_PLATFORM.include?"darwin18"
+	require_relative "mac/AnimeFace"
+elsif RUBY_PLATFORM.include?"linux"
+	require_relative "linux/AnimeFace"
+end
 
 image = Magick::ImageList.new(ARGV[0])
 faces = AnimeFace::detect(image)
