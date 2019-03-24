@@ -6,7 +6,22 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 import colorsys
 import numpy as np
+from PIL import Image, ImageStat
 from colorsys import rgb_to_hsv
+
+brightness_avg = 200.0
+
+def brightness(img):
+	imgL = img.convert('L')
+	stat = ImageStat.Stat(imgL)
+	return stat.mean[0]
+
+def balanced_brightness(img):
+	b = brightness(img)
+	rate = brightness_avg / b
+	cvImg = np.array(img) * rate
+	cvImg = np.clip(cvImg, 0, 255)
+	return Image.fromarray(cvImg)
 
 def to_hsv(color): 
 	""" converts color tuples to floats and then to hsv """
@@ -55,32 +70,32 @@ def get_dominant_color(image, target):
 		# colors by multiplying the count by zero, but still give them a low
 		# weight.
 		score = (saturation + 0.1) * count
-		resultDict[(r, g, b)] = (r, g, b, y, score)
-	for color in target:
-		print color, max_color_diff(color, resultDict)
+	# 	resultDict[(r, g, b)] = (r, g, b, y, score)
+	# for color in target:
+	# 	print color, max_color_diff(color, resultDict)
 		# resultList[(r, g, b)] = (score, (r, g, b), y)
 		# print r, g, b, score
 	# for color in target:
 	# 	print min_color_diff(color, resultList)
 
-	# 	if score > max_score:
-	# 		max_score = score
-	# 		dominant_color = (r, g, b, y)
+		if score > max_score:
+			max_score = score
+			dominant_color = (r, g, b, y)
 
-	# return dominant_color, max_score
+	return dominant_color, max_score
 
-if __name__ == '__main__':
-	from PIL import Image
-	left = [
-		(245, 218, 177),
-		(105, 74, 45)
-	]
-	right = [
-		(24, 14, 7),
-		(37, 28, 23),
-		(161, 114, 121),
-		(245, 228, 237)
-	]
-	for c in right:
-		print c, np.std(c)
+# if __name__ == '__main__':
+# 	from PIL import Image
+# 	left = [
+# 		(245, 218, 177),
+# 		(105, 74, 45)
+# 	]
+# 	right = [
+# 		(24, 14, 7),
+# 		(37, 28, 23),
+# 		(161, 114, 121),
+# 		(245, 228, 237)
+# 	]
+# 	for c in right:
+# 		print c, np.std(c)
 	# get_dominant_color(Image.open('left.png'), left)
