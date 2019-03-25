@@ -12,7 +12,7 @@ import re
 import numpy as np
 from PIL import Image
 
-from Utils import color_dist
+# from Utils import color_dist
 
 AnimeFaceCmd = 'ruby analysis.rb {filename}'
 pColor = re.compile(r'red=(\d+?), green=(\d+?), blue=(\d+?),')

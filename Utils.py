@@ -18,10 +18,15 @@ def brightness(img):
 
 def balanced_brightness(img):
 	b = brightness(img)
-	rate = brightness_avg / b
-	cvImg = np.array(img) * rate
-	cvImg = np.clip(cvImg, 0, 255)
-	return Image.fromarray(cvImg)
+	if b < 160:
+		rate = brightness_avg / b
+		cv2Img = np.array(img)
+		cv2Img = cv2Img * rate
+		cv2Img = np.rint(cv2Img)
+		cv2Img = np.clip(cv2Img, 0, 255)
+		cv2Img = cv2Img.astype(np.uint8)
+		return Image.fromarray(cv2Img)
+	return img
 
 def to_hsv(color): 
 	""" converts color tuples to floats and then to hsv """
@@ -83,6 +88,9 @@ def get_dominant_color(image, target):
 			dominant_color = (r, g, b, y)
 
 	return dominant_color, max_score
+
+if __name__ == '__main__':
+	balanced_brightness('sample/2_face.jpg')
 
 # if __name__ == '__main__':
 # 	from PIL import Image

@@ -1,6 +1,6 @@
 require "pp"
 require "rmagick"
-require_relative "AnimeFace"
+require_relative "linux/AnimeFace"
 
 if ARGV.size == 0
   warn "Usage: #{$0} <input image>"
